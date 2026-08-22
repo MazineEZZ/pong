@@ -1,3 +1,5 @@
+import { paddleSettings, gameSettings } from "./global.js";
+
 function createDOM({
   kind = "div",
   type = "",
@@ -30,6 +32,14 @@ function createDOM({
   return element;
 }
 
-function centerPaddle() {}
+function centerPaddleY() {
+  return gameSettings.size.height / 2 - paddleSettings.size.height / 2;
+}
 
-export { createDOM };
+function startPosition(start, isRight) {
+  return isRight
+    ? start
+    : gameSettings.size.width - paddleSettings.size.width - start;
+}
+
+export { createDOM, centerPaddleY, startPosition };

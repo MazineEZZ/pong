@@ -1,6 +1,7 @@
-import { gameSettings, gameState } from "./global.js";
+import { gameSettings, gameState, paddleSettings } from "./global.js";
 import { createPaddle } from "./paddle.js";
-import { createDOM } from "./utils.js";
+import { centerPaddleY, createDOM, startPosition } from "./utils.js";
+import { setUpInput, keys } from "./signals.js";
 
 function renderGame() {
   const gameContainer = createDOM({
@@ -29,17 +30,37 @@ function initGame() {
   document.body.appendChild(gameContainer);
 }
 
-function gameLoop() {
-  initGame();
+function update(dt) {
+  const speed = paddleSettings.speed * dt;
 
+  if (keys["ArrowUp"]) {
+    gameState.p1.state.y -= speed;
+  }
+  if (keys["ArrowDown"]) {
+    gameState.p1.state.y += speed;
+  }
+  if (keys["z"]) {
+    gameState.p2.state.y -= speed;
+  }
+  if (keys["s"]) {
+    gameState.p2.state.y += speed;
+  }
+}
+
+function gameLoop() {
   const paddle1 = createPaddle({
-    x: 10,
-    y: gameSettings.size.height / 2 - 80 / 2,
+    x: startPosition(10),
+    y: centerPaddleY(),
   });
   const paddle2 = createPaddle({
-    x: gameSettings.size.width - 50,
-    y: gameSettings.size.height / 2 - 80 / 2,
+    x: startPosition(10, true),
+    y: centerPaddleY(),
   });
+
+  gameState.p1 = paddle1;
+  gameState.p2 = paddle2;
+
+  setUpInput();
 
   const canvas = gameState.getCanvas();
   const ctx = canvas.getContext("2d");
@@ -50,7 +71,19 @@ function gameLoop() {
     paddle2.draw(ctx);
   }
 
-  draw();
+  let lastTime = 0;
+  function loop(timestamp) {
+    // To make the game aligned with all devices
+    const delta = (timestamp - lastTime) / 1000;
+    lastTime = timestamp;
+
+    draw();
+    update(delta);
+
+    requestAnimationFrame(loop);
+  }
+
+  requestAnimationFrame(loop);
 }
 
-export { gameLoop };
+export { initGame, gameLoop };

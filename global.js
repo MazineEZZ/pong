@@ -11,7 +11,7 @@ const paddleSettings = {
     width: 40,
     height: 80,
   },
-  speed: 60,
+  speed: 200,
   color: "white",
 };
 
