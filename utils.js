@@ -1,13 +1,16 @@
 function createDOM({
   kind = "div",
+  type = "",
   id = "",
   classArr = [],
-  type = "",
   text = "",
-  placeholder = "",
   alt = "",
   src = "",
   same = false,
+  // CSS
+  width = "",
+  height = "",
+  bgColor = "",
 } = {}) {
   const element = document.createElement(kind);
 
@@ -17,19 +20,16 @@ function createDOM({
   if (alt) element.alt = alt;
   if (src) element.src = src;
   if (text) element.textContent = text;
-  if (placeholder) element.placeholder = placeholder;
   classArr.forEach((cls) => element.classList.add(cls));
+
+  // CSS
+  if (width) element.style.width = width + "px";
+  if (height) element.style.height = height + "px";
+  if (bgColor) element.style.backgroundColor = bgColor;
 
   return element;
 }
 
-function renderGame() {
-  const gameContainer = createDOM({
-    id: "game-container",
-    same: true,
-  });
+function centerPaddle() {}
 
-  return gameContainer;
-}
-
-export { renderGame };
+export { createDOM };
