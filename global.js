@@ -4,14 +4,35 @@ const gameSettings = {
     height: 550,
   },
   bgColor: "#000",
+  keys: {
+    p1: {
+      up: "o",
+      down: "l",
+    },
+    p2: {
+      up: "z",
+      down: "s",
+    },
+  },
 };
 
 const paddleSettings = {
   size: {
-    width: 40,
+    width: 20,
     height: 80,
   },
-  speed: 200,
+  speed: 340,
+  radius: 5,
+  color: "white",
+};
+
+const ballSettings = {
+  size: {
+    width: 20,
+    height: 20,
+  },
+  speed: 400,
+  radius: 20,
   color: "white",
 };
 
@@ -21,4 +42,4 @@ const gameState = {
   },
 };
 
-export { gameSettings, gameState, paddleSettings };
+export { gameSettings, gameState, paddleSettings, ballSettings };

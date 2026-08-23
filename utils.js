@@ -1,4 +1,4 @@
-import { paddleSettings, gameSettings } from "./global.js";
+import { paddleSettings, gameSettings, ballSettings } from "./global.js";
 
 function createDOM({
   kind = "div",
@@ -36,10 +36,16 @@ function centerPaddleY() {
   return gameSettings.size.height / 2 - paddleSettings.size.height / 2;
 }
 
-function startPosition(start, isRight) {
-  return isRight
+function startPosition(start, isLeft) {
+  return isLeft
     ? start
     : gameSettings.size.width - paddleSettings.size.width - start;
 }
 
-export { createDOM, centerPaddleY, startPosition };
+function centerBall(isYAxis = false) {
+  if (isYAxis)
+    return gameSettings.size.height / 2 - ballSettings.size.height / 2;
+  return gameSettings.size.width / 2 - ballSettings.size.height / 2;
+}
+
+export { createDOM, centerPaddleY, startPosition, centerBall };
