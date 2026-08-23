@@ -1,6 +1,7 @@
 import { gameSettings, gameState, paddleSettings } from "./global.js";
 import { createPaddle } from "./paddle.js";
 import { createBall } from "./ball.js";
+import { createBarrier } from "./barrier.js";
 import {
   centerPaddleY,
   createDOM,
@@ -57,9 +58,20 @@ function gameLoop() {
     x: centerBall(),
     y: centerBall(true),
   });
+  const barrier1 = createBarrier({
+    y: gameSettings.barrierYOffset,
+  });
+  const barrier2 = createBarrier({
+    y:
+      gameSettings.size.height -
+      gameSettings.barrierHeight -
+      gameSettings.barrierYOffset,
+  });
 
   gameState.p1 = paddle1;
   gameState.p2 = paddle2;
+  gameState.b1 = barrier1;
+  gameState.b2 = barrier2;
   gameState.ball = ball;
 
   setUpInput();
@@ -71,6 +83,8 @@ function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     paddle1.draw(ctx);
     paddle2.draw(ctx);
+    barrier1.draw(ctx);
+    barrier2.draw(ctx);
     ball.draw(ctx);
   }
 

@@ -3,7 +3,11 @@ const gameSettings = {
     width: 800,
     height: 550,
   },
+  barrierHeight: 15,
+  barrierXOffset: 80,
+  barrierYOffset: 20,
   bgColor: "#000",
+  barrierColor: "#fff",
   keys: {
     p1: {
       up: "o",
@@ -23,7 +27,7 @@ const paddleSettings = {
   },
   speed: 340,
   radius: 5,
-  color: "white",
+  color: "#fff",
 };
 
 const ballSettings = {
@@ -33,7 +37,7 @@ const ballSettings = {
   },
   speed: 400,
   radius: 20,
-  color: "white",
+  color: "#fff",
 };
 
 const gameState = {

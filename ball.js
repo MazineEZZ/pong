@@ -10,7 +10,8 @@ function createBall({
   speed = ballSettings.speed,
 }) {
   const state = { x, y, width, height, color, radius, speed };
-  state.direction = -1;
+  state.vy = 0;
+  state.vx = -state.speed;
 
   function draw(ctx) {
     ctx.fillStyle = state.color;
@@ -21,31 +22,49 @@ function createBall({
     ctx.fill();
   }
 
-  function move(delta) {
-    state.x += state.speed * delta * state.direction;
+  function inCollision(a, b) {
+    return (
+      a.x < b.x + b.width &&
+      a.x + a.width > b.x &&
+      a.y < b.y + b.height &&
+      a.y + a.height > b.y
+    );
   }
 
-  let collisions = [];
-  function collisionCheck() {
-    if (
-      gameState.p2.state.y < state.y &&
-      state.y < gameState.p2.state.y + gameState.p2.state.height &&
-      gameState.p2.state.x < state.x &&
-      state.x < gameState.p2.state.x + gameState.p2.state.width
-    ) {
-      state.direction = 1;
-      collisions.push(gameState.p2.state.x + " " + gameState.p2.state.y);
-    }
+  function calcDeviation(paddle) {
+    const paddleCenterY = paddle.y + paddle.height / 2;
+    const ballCenterY = state.y + state.height / 2;
+    const value = (ballCenterY - paddleCenterY) / (paddle.height / 2); // -1 to +1 range
+    return Math.max(-1, Math.min(1, value)); // Incase the deviation gets out of range
+  }
 
-    if (
-      gameState.p1.state.y < state.y &&
-      state.y < gameState.p1.state.y + gameState.p1.state.height &&
-      gameState.p1.state.x < state.x &&
-      state.x < gameState.p1.state.x + gameState.p1.state.width
-    ) {
-      state.direction = -1;
+  function bounce({ obj, dir = state.direction, isBarrier = false }) {
+    const deviation = calcDeviation(Object.assign({}, obj));
+    let maxAngle = isBarrier ? Math.PI / 6 : Math.PI / 3;
+    const angle = deviation * maxAngle; // max 60 degs
+    state.direction = dir;
+    state.vx = state.direction * state.speed * Math.cos(angle);
+    state.vy = state.speed * Math.sin(angle);
+  }
+
+  function collisionCheck() {
+    if (inCollision(state, gameState.p2.state)) {
+      bounce({ obj: gameState.p2.state, dir: 1 });
     }
-    console.log(collisions[0]);
+    if (inCollision(state, gameState.p1.state)) {
+      bounce({ obj: gameState.p1.state, dir: -1 });
+    }
+    if (inCollision(state, gameState.b1.state)) {
+      bounce({ obj: gameState.b1.state, isBarrier: true });
+    }
+    if (inCollision(state, gameState.b2.state)) {
+      bounce({ obj: gameState.b2.state, isBarrier: true });
+    }
+  }
+
+  function move(delta) {
+    state.x += state.vx * delta;
+    state.y += state.vy * delta;
   }
 
   return { state, draw, move, collisionCheck };

@@ -48,4 +48,8 @@ function centerBall(isYAxis = false) {
   return gameSettings.size.width / 2 - ballSettings.size.height / 2;
 }
 
-export { createDOM, centerPaddleY, startPosition, centerBall };
+function toDegree(degree) {
+  return (degree * 180) / Math.PI;
+}
+
+export { createDOM, centerPaddleY, startPosition, centerBall, toDegree };
