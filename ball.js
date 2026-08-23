@@ -25,28 +25,30 @@ function createBall({
     state.x += state.speed * delta * state.direction;
   }
 
-  function collision() {
+  let collisions = [];
+  function collisionCheck() {
     if (
-      state.x + state.width - gameState.p2.state.x - gameState.p2.state.width <
-      0
+      gameState.p2.state.y < state.y &&
+      state.y < gameState.p2.state.y + gameState.p2.state.height &&
+      gameState.p2.state.x < state.x &&
+      state.x < gameState.p2.state.x + gameState.p2.state.width
     ) {
       state.direction = 1;
+      collisions.push(gameState.p2.state.x + " " + gameState.p2.state.y);
     }
 
     if (
-      state.x + state.width - gameState.p1.state.x - gameState.p1.state.width >
-      0
+      gameState.p1.state.y < state.y &&
+      state.y < gameState.p1.state.y + gameState.p1.state.height &&
+      gameState.p1.state.x < state.x &&
+      state.x < gameState.p1.state.x + gameState.p1.state.width
     ) {
       state.direction = -1;
     }
-
-    console.log(
-      gameState.p2.state.y < state.y &&
-        state.y < gameState.p2.state.y + gameState.p2.state.height,
-    );
+    console.log(collisions[0]);
   }
 
-  return { state, draw, move, collision };
+  return { state, draw, move, collisionCheck };
 }
 
 export { createBall };

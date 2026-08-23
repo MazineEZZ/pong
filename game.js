@@ -37,7 +37,7 @@ function initGame() {
 }
 
 function update(dt) {
-  gameState.ball.collision();
+  gameState.ball.collisionCheck();
 
   gameState.ball.move(dt);
   gameState.p1.update(keys, gameSettings.keys.p1, dt);
