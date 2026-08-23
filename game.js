@@ -2,6 +2,7 @@ import { gameSettings, gameState, paddleSettings } from "./global.js";
 import { createPaddle } from "./paddle.js";
 import { createBall } from "./ball.js";
 import { createBarrier } from "./barrier.js";
+import { createCenterLine } from "./centerLine.js";
 import {
   centerPaddleY,
   createDOM,
@@ -40,7 +41,12 @@ function initGame() {
 function update(dt) {
   gameState.ball.collisionCheck();
 
-  gameState.ball.move(dt);
+  if (keys[" "] && !gameState.started) {
+    gameState.ball.start(-1, 0);
+    gameState.started = true;
+  }
+
+  gameState.ball.update(dt);
   gameState.p1.update(keys, gameSettings.keys.p1, dt);
   gameState.p2.update(keys, gameSettings.keys.p2, dt);
 }
@@ -67,12 +73,15 @@ function gameLoop() {
       gameSettings.barrierHeight -
       gameSettings.barrierYOffset,
   });
+  const centerLine = createCenterLine();
 
   gameState.p1 = paddle1;
   gameState.p2 = paddle2;
   gameState.b1 = barrier1;
   gameState.b2 = barrier2;
   gameState.ball = ball;
+
+  gameState.started = false;
 
   setUpInput();
 
@@ -86,6 +95,7 @@ function gameLoop() {
     barrier1.draw(ctx);
     barrier2.draw(ctx);
     ball.draw(ctx);
+    centerLine.draw(ctx);
   }
 
   let lastTime = null;

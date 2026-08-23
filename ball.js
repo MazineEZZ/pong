@@ -1,4 +1,4 @@
-import { ballSettings, gameState } from "./global.js";
+import { ballSettings, gameSettings, gameState } from "./global.js";
 
 function createBall({
   x,
@@ -10,8 +10,9 @@ function createBall({
   speed = ballSettings.speed,
 }) {
   const state = { x, y, width, height, color, radius, speed };
+  state.direction = 0;
   state.vy = 0;
-  state.vx = -state.speed;
+  state.vx = -state.speed * state.direction;
 
   function draw(ctx) {
     ctx.fillStyle = state.color;
@@ -39,10 +40,16 @@ function createBall({
   }
 
   function bounce({ obj, dir = state.direction, isBarrier = false }) {
-    const deviation = calcDeviation(Object.assign({}, obj));
+    const deviation = calcDeviation(obj);
     let maxAngle = isBarrier ? Math.PI / 6 : Math.PI / 3;
-    const angle = deviation * maxAngle; // max 60 degs
+    const angle = deviation * maxAngle;
     state.direction = dir;
+    state.vx = state.direction * state.speed * Math.cos(angle);
+    state.vy = state.speed * Math.sin(angle);
+  }
+
+  function start(direction, angle) {
+    state.direction = direction;
     state.vx = state.direction * state.speed * Math.cos(angle);
     state.vy = state.speed * Math.sin(angle);
   }
@@ -62,12 +69,25 @@ function createBall({
     }
   }
 
-  function move(delta) {
+  function update(delta) {
     state.x += state.vx * delta;
     state.y += state.vy * delta;
+    isLeft();
   }
 
-  return { state, draw, move, collisionCheck };
+  function isLeft() {
+    if (state.x <= 0 || state.x >= gameSettings.size.width) {
+      state.x = gameSettings.size.width / 2 - state.width / 2;
+      state.y = gameSettings.size.height / 2 - state.height / 2;
+      state.vx = 0;
+      state.vy = 0;
+      setTimeout(() => {
+        state.vx = state.speed * state.direction;
+      }, 800);
+    }
+  }
+
+  return { state, draw, update, collisionCheck, start };
 }
 
 export { createBall };
