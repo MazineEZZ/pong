@@ -76,14 +76,20 @@ function createBall({
   }
 
   function isLeft() {
-    if (state.x <= 0 || state.x >= gameSettings.size.width) {
+    if (state.x <= 0 || state.x + state.width >= gameSettings.size.width) {
+      if (state.x <= 0) {
+        gameState.scoreP1++;
+      } else {
+        gameState.scoreP2++;
+      }
       state.x = gameSettings.size.width / 2 - state.width / 2;
       state.y = gameSettings.size.height / 2 - state.height / 2;
       state.vx = 0;
       state.vy = 0;
+      state.speed = ballSettings.speed;
       setTimeout(() => {
         state.vx = state.speed * state.direction;
-      }, 800);
+      }, ballSettings.waitTime);
     }
   }
 

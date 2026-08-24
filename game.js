@@ -9,7 +9,9 @@ import {
   startPosition,
   centerBall,
 } from "./utils.js";
+import { renderScore } from "./score.js";
 import { setUpInput, keys } from "./signals.js";
+import { renderMessage } from "./message.js";
 
 function renderGame() {
   const gameContainer = createDOM({
@@ -33,7 +35,14 @@ function renderGame() {
 }
 
 function initGame() {
+  document.body.replaceChildren();
   const gameContainer = renderGame();
+
+  const scoreP1 = renderScore("p1", true);
+  const scoreP2 = renderScore("p2", false);
+
+  gameContainer.appendChild(scoreP1);
+  gameContainer.appendChild(scoreP2);
 
   document.body.appendChild(gameContainer);
 }
@@ -49,6 +58,44 @@ function update(dt) {
   gameState.ball.update(dt);
   gameState.p1.update(keys, gameSettings.keys.p1, dt);
   gameState.p2.update(keys, gameSettings.keys.p2, dt);
+  updateScore();
+  isGameOver();
+}
+
+function showMessage(message) {
+  const gameContainer = document.getElementById("game-container");
+  const msgBox = renderMessage(message);
+  gameContainer.appendChild(msgBox);
+}
+
+function resetGame() {
+  initGame();
+  gameLoop();
+}
+
+function isGameOver() {
+  if (gameState.scoreP1 >= 1) {
+    gameState.isGameOver = true;
+    showMessage("Right Side player won!");
+    setTimeout(() => {
+      resetGame();
+    }, 1000);
+  }
+  if (gameState.scoreP2 >= 5) {
+    gameState.isGameOver = true;
+    showMessage("Left Side player won");
+    setTimeout(() => {
+      resetGame();
+    }, 1000);
+  }
+}
+
+function updateScore() {
+  const scoreP1 = document.getElementById("p1");
+  const scoreP2 = document.getElementById("p2");
+
+  scoreP1.textContent = gameState.scoreP1;
+  scoreP2.textContent = gameState.scoreP2;
 }
 
 function gameLoop() {
@@ -81,7 +128,10 @@ function gameLoop() {
   gameState.b2 = barrier2;
   gameState.ball = ball;
 
+  gameState.scoreP1 = 0;
+  gameState.scoreP2 = 0;
   gameState.started = false;
+  gameState.isGameOver = false;
 
   setUpInput();
 
@@ -103,10 +153,14 @@ function gameLoop() {
     if (lastTime === null) lastTime = timestamp;
     // To make the game aligned with all devices
     const delta = (timestamp - lastTime) / 1000;
+
+    console.log(delta);
     lastTime = timestamp;
 
-    update(delta);
-    draw();
+    if (!gameState.isGameOver) {
+      update(delta);
+      draw();
+    }
 
     requestAnimationFrame(loop);
   }

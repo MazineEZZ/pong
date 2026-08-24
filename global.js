@@ -38,7 +38,8 @@ const ballSettings = {
   },
   speed: 600,
   radius: 20,
-  color: "#fff",
+  waitTime: 1000,
+  color: "yellow",
 };
 
 const gameState = {

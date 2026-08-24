@@ -9,3 +9,14 @@ body {
 
   overflow: hidden;
 }
+
+.game-container {
+  position: relative;
+}
+
+p {
+  position: absolute;
+  top: 0;
+  color: white;
+  font-weight: bold;
+}
