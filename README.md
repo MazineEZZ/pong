@@ -6,9 +6,9 @@ Pong is a **2D game** of which two players control a paddle each and try to scor
 
 ## Tech stack
 
-- Vanilla JS
-- CSS
-- HTML
+- **Vanilla JS**
+- **CSS**
+- **HTML**
   Note: No game engine was used. All game logic, and physics were implemented entirely by me.
 
 ## What I learned?
