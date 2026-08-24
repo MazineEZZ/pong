@@ -9,6 +9,7 @@ import {
   startPosition,
   centerBall,
 } from "./utils.js";
+import { createAudio } from "./audio.js";
 import { renderScore } from "./score.js";
 import { setUpInput, keys } from "./signals.js";
 import { renderMessage } from "./message.js";
@@ -41,6 +42,8 @@ function initGame() {
   const scoreP1 = renderScore("p1", true);
   const scoreP2 = renderScore("p2", false);
 
+  gameState.audio = createAudio();
+
   gameContainer.appendChild(scoreP1);
   gameContainer.appendChild(scoreP2);
 
@@ -53,6 +56,7 @@ function update(dt) {
   if (keys[" "] && !gameState.started) {
     gameState.ball.start(-1, 0);
     gameState.started = true;
+    gameState.audio.music.play();
   }
 
   gameState.ball.update(dt);
@@ -69,12 +73,14 @@ function showMessage(message) {
 }
 
 function resetGame() {
+  gameState.audio.music.pause();
+  gameState.stopLoop();
   initGame();
   gameLoop();
 }
 
 function isGameOver() {
-  if (gameState.scoreP1 >= 1) {
+  if (gameState.scoreP1 >= 5) {
     gameState.isGameOver = true;
     showMessage("Right Side player won!");
     setTimeout(() => {
@@ -149,12 +155,12 @@ function gameLoop() {
   }
 
   let lastTime = null;
+  let animationFrameId = null;
   function loop(timestamp) {
     if (lastTime === null) lastTime = timestamp;
     // To make the game aligned with all devices
     const delta = (timestamp - lastTime) / 1000;
 
-    console.log(delta);
     lastTime = timestamp;
 
     if (!gameState.isGameOver) {
@@ -162,10 +168,17 @@ function gameLoop() {
       draw();
     }
 
-    requestAnimationFrame(loop);
+    animationFrameId = requestAnimationFrame(loop);
   }
 
-  requestAnimationFrame(loop);
+  animationFrameId = requestAnimationFrame(loop);
+
+  gameState.stopLoop = () => {
+    if (animationFrameId !== null) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+  };
 }
 
 export { initGame, gameLoop };

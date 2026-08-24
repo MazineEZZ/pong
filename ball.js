@@ -40,8 +40,16 @@ function createBall({
   }
 
   function bounce({ obj, dir = state.direction, isBarrier = false }) {
+    let maxAngle;
+    if (isBarrier) {
+      maxAngle = Math.PI / 6;
+      gameState.audio.playWall();
+    } else {
+      gameState.audio.playHit();
+      maxAngle = Math.PI / 3;
+    }
+
     const deviation = calcDeviation(obj);
-    let maxAngle = isBarrier ? Math.PI / 6 : Math.PI / 3;
     const angle = deviation * maxAngle;
     state.direction = dir;
     state.vx = state.direction * state.speed * Math.cos(angle);
@@ -82,6 +90,7 @@ function createBall({
       } else {
         gameState.scoreP2++;
       }
+      gameState.audio.playWin();
       state.x = gameSettings.size.width / 2 - state.width / 2;
       state.y = gameSettings.size.height / 2 - state.height / 2;
       state.vx = 0;
