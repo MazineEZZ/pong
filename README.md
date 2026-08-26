@@ -7,8 +7,8 @@ Pong is a **2D game** of which two players control a paddle each and try to scor
 ## How to play?
 Press "space" to start, then:
 
-- Player 1: uses the key "z" to go up, and "s" to go down.
-- Player 2: uses the key "o" to go up, and "l" to go down.
+- Player 1: uses the key **"z"** to go up, and **"s"** to go down.
+- Player 2: uses the key **"o"** to go up, and **"l"** to go down.
 
 ## Tech stack
 
