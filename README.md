@@ -28,7 +28,7 @@ During this project, I had to learn new concepts (or even come up with my own), 
 
 ## What I liked?
 
-I really enjoyed the creation of this project, especially when I struggled at **3am** to come up with a collision system entirely by my own, using no tutorial or AI help. Those moments were really special. And unfortunately, a game engine just steals those moments of joy. However, I noticed that even though **Pong** is a fairly simple game, it took me a _massive amount of time_, _a lot of headaches_, and giving up moments just to make it, so I understand how game engines can be of great help.
+I really enjoyed the creation of this project, especially when I struggled at **3am** to come up with a collision system entirely by my own, implemented with AI assistance for debugging and explanations, but no tutorials or copy-pasted solutions, every line was written and understood by me. Those moments were really special. And unfortunately, a game engine just steals those moments of joy. However, I noticed that even though **Pong** is a fairly simple game, it took me a _massive amount of time_, _a lot of headaches_, and giving up moments just to make it, so I understand how game engines can be of great help.
 
 ## What's coming next?
 
