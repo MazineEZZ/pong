@@ -5,6 +5,7 @@
 Pong is a **2D game** of which two players control a paddle each and try to score on each other. It was made for [The 20 Games Challenge](https://20_games_challenge.gitlab.io/). Here's a [live preview](https://mazineezz.github.io/pong/).
 
 ## How to play?
+Press "space" to start, then:
 
 - Player 1: uses the key "z" to go up, and "s" to go down.
 - Player 2: uses the key "o" to go up, and "l" to go down.
